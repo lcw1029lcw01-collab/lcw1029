@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "ados/schemas/shot.json",
+  "$id": "ados/스키마/shot.json",
   "title": "Shot",
   "description": "Scene 안의 카메라 단위. 영화는 Shot이 계속 바뀐다 (같은 카메라 반복 금지).",
   "type": "object",
@@ -14,7 +14,7 @@
     "camera": {
       "type": "string",
       "enum": ["Establishing", "Wide", "CloseUp", "ExtremeCloseUp", "Drone", "Shoulder", "Side", "POV", "LowAngle", "HighAngle", "Tracking", "Orbit", "Macro", "Handheld"],
-      "description": "카메라 타입. bibles/camera.md 참조"
+      "description": "카메라 타입. 바이블/카메라.md 참조"
     },
     "lens": {
       "type": "string",

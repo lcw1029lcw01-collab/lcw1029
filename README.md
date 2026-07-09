@@ -18,21 +18,21 @@ Netflix 수준의 AI 다큐멘터리를 자동 생성하는 운영체제.
 
 ## 시작하기 (AI와 사람 공통)
 
-**`docs/00_AI_CONTEXT.md`부터 번호 순서로 읽는다.**
+**`문서/00_AI지침.md`부터 번호 순서로 읽는다.**
 
 ```
-docs/
-├── 00_AI_CONTEXT.md        ⭐ 가장 먼저
-├── 01_PROJECT_CHARTER.md   헌법
-├── 02_VISION.md            비전
-├── 03_ARCHITECTURE.md      구조
-├── 04_ROADMAP.md           로드맵
-├── 05_GLOSSARY.md          용어집
-├── 06_DEVELOPMENT_RULES.md 개발 규칙
-└── bibles/                 제작 규칙 (story·director·camera·emotion·world·prompt)
+문서/
+├── 00_AI지침.md        ⭐ 가장 먼저
+├── 01_프로젝트헌장.md   헌법
+├── 02_비전.md            비전
+├── 03_시스템구조.md      구조
+├── 04_로드맵.md           로드맵
+├── 05_용어집.md          용어집
+├── 06_개발규칙.md 개발 규칙
+└── 바이블/                 제작 규칙 (스토리·연출·카메라·감정·세계관·프롬프트)
 ```
 
-현재 상태는 [PROJECT_STATE.md](PROJECT_STATE.md), 변경 이력은 [CHANGELOG.md](CHANGELOG.md) 참조.
+현재 상태는 [현재상태.md](현재상태.md), 변경 이력은 [변경이력.md](변경이력.md) 참조.
 
 ## 현재 버전
 
