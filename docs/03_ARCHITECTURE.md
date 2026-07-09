@@ -1,175 +1,318 @@
-# 03. ARCHITECTURE — 시스템 구조
+# ADOS Architecture
 
-## 핵심 관점: ADOS는 회사다
+Version: 1.0.0
 
-ADOS는 Engine의 나열이 아니다. **회사이며, AI 직원(Employee)들이 협업한다.**
+Status: Draft
 
-```
-ADOS
-
-CEO
-│
-├── Research Department    (리서치)
-├── Writing Department     (대본)
-├── Directing Department   (연출)
-├── Visual Department      (이미지·영상)
-├── Audio Department       (나레이션·음악)
-├── Editing Department     (편집)
-└── Marketing Department   (SEO·업로드)
-```
-
-### AI 직원 목록
-
-```
-대표(CEO) → 프로듀서 → 리서처 → 작가 → 감독 → 촬영감독
-→ 컨셉아티스트 → 영상감독 → 성우 → 편집자 → SEO매니저 → 업로드매니저
-```
-
-각 직원의 역할 정의는 `agents/` 폴더에 있다.
-직원들은 앞 직원의 결과물을 보고 일한다. (감독은 Story를 보고 Scene을 만들고, 촬영감독은 감독의 연출을 보고 카메라를 정하고, Prompt 직원은 카메라를 보고 Prompt를 만든다.)
+Last Updated: 2026-07-09
 
 ---
 
-## 전체 파이프라인
+# 1. Purpose (목적)
 
-```
-Topic (주제 입력)
-    │
-    ▼
-Research Engine      ← 과학 논문, NASA 자료, 진화학, 통계, 사실 검증
-    │
-    ▼
-Knowledge Engine     ← 리서치 결과 정리·구조화
-    │
-    ▼
-Story Engine         ← Hook / Conflict / Discovery / Twist / Ending / Question
-    │
-    ▼
-Emotion Engine       ← Scene별 감정 수치 (외로움 80, 희망 10, 공포 60, 신비 70 ...)
-    │
-    ▼
-Director Engine      ← ⭐ 핵심. 감정 → 카메라·렌즈·조명·색감·음악·속도 결정
-    │
-    ▼
-Scene Engine         ← 25분 = 120~200 Scene 분할, Scene별 나레이션·길이·감정
-    │
-    ▼
-Visual Engine        ← Midjourney Prompt 자동 조립 (인물 일관성 유지)
-    │
-    ▼
-Motion Engine        ← Kling 카메라 움직임 Prompt
-    │
-    ▼
-Voice Engine         ← Typecast 감정(TTS Emotion) 태그
-    │
-    ▼
-Editor Engine        ← 자동 편집, Premiere XML, 자막
-    │
-    ▼
-Publishing Engine    ← SEO (제목·설명·태그·챕터·고정댓글), 썸네일, 업로드
-```
+이 문서는 ADOS(AI Documentary Operating System)의 전체 시스템 구조를 정의한다.
 
-### Decision Engineering — 왜 Director가 먼저인가
-
-99%는 Prompt에 집착한다. 우리는 **Prompt보다 Director가 중요하다.**
-
-```
-Scene 12
-  감정: 외로움
-    ↓
-  Camera: Wide
-    ↓
-  Lens: 24mm
-    ↓
-  Weather: Snow
-    ↓
-  Color: Blue
-    ↓
-  BGM: Low Piano
-    ↓
-  Prompt: (자동 생성)
-```
-
-**Director Engine이 결정하면, Prompt는 자동으로 나온다. Prompt Engine은 사실 제일 마지막이다.**
+이 문서는 프로젝트에서 가장 중요한 기술 문서이며, 모든 개발은 이 문서를 기준으로 진행한다.
 
 ---
 
-## 내부 프로젝트 구분
+# 2. Architecture Principles (설계 원칙)
 
-```
-ADOS
-├── Core      — 운영체제: JSON, Schema, Agent
-├── Brain     — AI가 생각하는 부분: Story, Director, Emotion, Research
-├── Studio    — 영상 제작: Midjourney, Kling, Typecast, Premiere
-├── Factory   — 자동화: API, Queue, Scheduler, Render
-└── Channels  — Beyond Humanity, Humanity Explained, Civilization Stories ...
-```
+## 2.1 Pipeline First
 
-채널이 성공하면 **Engine 하나만 추가**하면 된다 (예: History Engine). 나머지 시스템은 그대로.
+ADOS는 하나의 거대한 AI가 모든 작업을 수행하지 않는다.
+
+작업을 여러 단계(Pipeline)로 나누고, 각 단계는 하나의 명확한 책임만 가진다.
 
 ---
 
-## 폴더 구조
+## 2.2 Decision First
+
+ADOS의 핵심은 Prompt 생성이 아니다.
+
+ADOS의 핵심은 의사결정(Decision)이다.
+
+모든 생성은 의사결정 이후에 이루어진다.
+
+Research → Story → Emotion → Direction → Generation
+
+---
+
+## 2.3 AI Provider Independent
+
+ADOS는 특정 AI 서비스에 종속되지 않는다.
+
+예시
+
+Image Provider
+
+- Midjourney
+- Flux
+- GPT Image
+- Stable Diffusion
+
+Motion Provider
+
+- Kling
+- Runway
+- Veo
+
+Voice Provider
+
+- Typecast
+- ElevenLabs
+- OpenAI Voice
+
+Provider는 언제든 교체 가능해야 한다.
+
+---
+
+## 2.4 Modular
+
+각 모듈은 독립적으로 개발 가능해야 한다.
+
+한 모듈이 변경되어도 다른 모듈에 영향을 최소화해야 한다.
+
+---
+
+# 3. System Overview
 
 ```
-ados/
-├── README.md            — 프로젝트 소개
-├── PROJECT_STATE.md     — 현재 상태 (AI가 작업 후 갱신)
-├── TASK.md              — 오늘 할 일
-├── CHANGELOG.md         — 변경 이력 (왜 바꿨는지)
-│
-├── docs/                — 설계 문서 (00~06 번호 순서로 읽기)
-│   ├── 00_AI_CONTEXT.md
-│   ├── 01_PROJECT_CHARTER.md
-│   ├── 02_VISION.md
-│   ├── 03_ARCHITECTURE.md
-│   ├── 04_ROADMAP.md
-│   ├── 05_GLOSSARY.md
-│   ├── 06_DEVELOPMENT_RULES.md
-│   ├── bibles/          — 제작 규칙: story, director, camera, emotion, world, prompt
-│   ├── decisions/       — 중요한 결정 기록
-│   └── meetings/        — 회의(대화) 기록
-│
-├── agents/              — AI 직원 역할 정의
-├── engines/             — 엔진 구현 (Story, Director, Scene, Prompt, Motion, Editor ...)
-├── schemas/             — 데이터 규격 (scene.json, shot.json, project.json)
-├── prompts/             — 프롬프트 템플릿 (midjourney/, kling/, typecast/)
-├── examples/            — 예제 (beyond_humanity 1편 등)
-├── scripts/             — 유틸리티 스크립트
-├── src/                 — 소스 코드
-├── tests/               — 테스트
-└── output/              — 생성 결과물
+USER
+↓
+Project
+↓
+Research
+↓
+Story
+↓
+Scene Planning
+↓
+Visual Planning
+↓
+Asset Generation
+↓
+Editing
+↓
+Publishing
 ```
 
 ---
 
-## 데이터 중심 설계
+# 4. Core Modules
 
-모든 엔진은 **JSON/YAML로 데이터를 주고받는다.** Scene 하나의 예:
+## 4.1 Project Module
 
-```json
-{
-  "scene": 1,
-  "emotion": "외로움",
-  "camera": "와이드샷",
-  "lens": "24mm",
-  "lighting": "새벽",
-  "weather": "안개",
-  "subject": "미래 인간",
-  "motion": "천천히 걷기",
-  "duration": 5
-}
-```
+책임
 
-Claude Code는 이 JSON만 받아도 이미지, 영상, 나레이션까지 만들 수 있다.
-정식 규격은 `schemas/scene.json`, `schemas/shot.json`, `schemas/project.json`에 정의한다.
+프로젝트 전체 설정 관리
+
+입력
+
+- 주제
+- 언어
+- 영상 길이
+- 채널
+
+출력
+
+Project Configuration
 
 ---
 
-## 외부 도구 파이프라인
+## 4.2 Research Module
+
+책임
+
+주제 조사
+
+입력
+
+Topic
+
+출력
+
+Research Document
+
+---
+
+## 4.3 Story Module
+
+책임
+
+스토리 생성
+
+입력
+
+Research
+
+출력
+
+Story Structure
+
+---
+
+## 4.4 Scene Module
+
+책임
+
+스토리를 Scene으로 분리
+
+입력
+
+Story
+
+출력
+
+Scene List
+
+---
+
+## 4.5 Visual Planning Module
+
+책임
+
+각 Scene의 연출 결정
+
+결정 항목
+
+- Camera
+- Lighting
+- Color
+- Mood
+- Composition
+
+출력
+
+Visual Plan
+
+---
+
+## 4.6 Asset Generation Module
+
+책임
+
+Visual Plan을 실제 AI 서비스에서 생성
+
+- Image
+- Motion
+- Voice
+- Music
+- Subtitle
+
+---
+
+## 4.7 Editing Module
+
+책임
+
+모든 Asset을 하나의 영상으로 합성
+
+출력
+
+MP4
+
+---
+
+## 4.8 Publishing Module
+
+책임
+
+유튜브 업로드
+
+생성
+
+- Title
+- Description
+- Tags
+- Thumbnail
+- SEO
+
+---
+
+# 5. Data Flow
 
 ```
-ChatGPT (설계·대본) → Claude Code (구현·오케스트레이션)
-→ Midjourney (이미지) → Kling (영상화) → Runway (카메라 무빙·애니메이션)
-→ Typecast (나레이션) → Premiere (편집) → YouTube (업로드)
+Topic
+↓
+Research
+↓
+Story
+↓
+Scene
+↓
+Visual Plan
+↓
+Assets
+↓
+Video
+↓
+Publish
 ```
+
+---
+
+# 6. Directory Structure
+
+```
+src/
+├── project/
+├── research/
+├── story/
+├── scene/
+├── visual/
+├── providers/
+├── editing/
+├── publish/
+└── shared/
+```
+
+---
+
+# 7. Providers
+
+- Image Provider
+- Motion Provider
+- Voice Provider
+- Music Provider
+- Subtitle Provider
+- LLM Provider
+
+모든 Provider는 Interface를 구현해야 한다.
+
+Provider 변경 시 Engine은 수정하지 않는다.
+
+---
+
+# 8. Future Modules
+
+- Knowledge Base
+- Memory
+- Director AI
+- Style Memory
+- Channel Memory
+- Quality Checker
+- Fact Checker
+- Analytics
+
+---
+
+# 9. Non Goals
+
+현재 버전(v1)은 아래 기능을 포함하지 않는다.
+
+- 자동 업로드 스케줄링
+- 멀티 사용자
+- 웹 서비스
+- 실시간 협업
+
+---
+
+# 10. Acceptance Criteria
+
+이 문서를 읽은 개발자는
+
+- 전체 구조를 이해할 수 있어야 한다.
+- 각 모듈의 책임을 이해할 수 있어야 한다.
+- 데이터 흐름을 이해할 수 있어야 한다.
+- Provider를 교체 가능한 구조로 구현할 수 있어야 한다.
