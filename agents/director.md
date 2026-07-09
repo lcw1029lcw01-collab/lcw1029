@@ -14,20 +14,20 @@ Story를 보고 Scene마다 연출을 결정한다. 항상 이 순서:
 ```
 
 - Scene별 감정 수치 분석 (Emotion Engine)
-- 감정 → 연출 매핑 (바이블/연출.md 규칙표)
+- 감정 → 연출 매핑 (bibles/director.md 규칙표)
 - 영상/이미지/인포그래픽/텍스트 비율 결정 (20~25% / 50~60% / 10~15% / 5~10%)
 - Shot 다양화 — 같은 카메라 반복 금지
 - Visual Motif 삽입 위치 결정
 
 ## 입력
 - Scene 목록 + 나레이션 (Writer 출력)
-- `문서/바이블/감정.md` (감정 규칙)
+- `docs/bibles/emotion.md` (감정 규칙)
 
 ## 출력
 - scene.json의 연출 필드 (emotion, camera, lens, lighting, weather, color, bgm, media_type)
 
 ## 따르는 규칙
-- `문서/바이블/연출.md` — 감정→연출 매핑, 비율 규칙, Shot 다양화
+- `docs/bibles/director.md` — 감정→연출 매핑, 비율 규칙, Shot 다양화
 - Prompt를 직접 쓰지 않는다. 결정만 내린다. **Prompt는 결과다.**
 
 ## 예시

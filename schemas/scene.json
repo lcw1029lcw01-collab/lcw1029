@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "ados/스키마/scene.json",
+  "$id": "ados/schemas/scene.json",
   "title": "Scene",
   "description": "영상의 최소 단위. 5~8초. 모든 엔진이 이 데이터로 통신한다. Prompt는 여기서 자동 생성되는 결과물이다.",
   "type": "object",
@@ -22,7 +22,7 @@
     },
     "emotion": {
       "type": "object",
-      "description": "감정 수치 모델 (0~100). 지배 감정이 연출을 결정한다. 바이블/감정.md 참조",
+      "description": "감정 수치 모델 (0~100). 지배 감정이 연출을 결정한다. bibles/emotion.md 참조",
       "properties": {
         "dominant": { "type": "string", "description": "지배 감정 (예: 외로움)" },
         "scores": {
@@ -34,13 +34,13 @@
     },
     "camera": {
       "type": "string",
-      "description": "카메라 타입. 바이블/카메라.md 목록에서 선택",
+      "description": "카메라 타입. bibles/camera.md 목록에서 선택",
       "enum": ["Establishing", "Wide", "CloseUp", "ExtremeCloseUp", "Drone", "Shoulder", "Side", "POV", "LowAngle", "HighAngle", "Tracking", "Orbit", "Macro", "Handheld"]
     },
     "lens": {
       "type": "string",
       "enum": ["24mm", "35mm", "50mm", "85mm"],
-      "description": "렌즈. 바이블/카메라.md 참조"
+      "description": "렌즈. bibles/camera.md 참조"
     },
     "lighting": { "type": "string", "description": "조명 (예: 새벽, Sunrise, Golden)" },
     "weather": { "type": "string", "description": "날씨 (예: 안개, 비, 눈)" },
@@ -55,7 +55,7 @@
     "media_type": {
       "type": "string",
       "enum": ["video", "image", "infographic", "text"],
-      "description": "미디어 유형. 비율 규칙은 바이블/연출.md (video 20~25%, image 50~60%, infographic 10~15%, text 5~10%)"
+      "description": "미디어 유형. 비율 규칙은 bibles/director.md (video 20~25%, image 50~60%, infographic 10~15%, text 5~10%)"
     },
     "color": { "type": "string", "description": "색감. Color Bible 참조 (예: Blue, Orange, Cyan)" },
     "bgm": { "type": "string", "description": "음악 분위기 (예: Low Piano, Heartbeat)" },

@@ -92,4 +92,4 @@ Scene → Emotion → Camera → Lens → Time → Weather → Architecture
 → Character → Composition → Movie Reference → Prompt 생성
 ```
 
-입력은 Scene JSON(`스키마/scene.json`), 출력은 Midjourney/Kling Prompt 문자열이다.
+입력은 Scene JSON(`schemas/scene.json`), 출력은 Midjourney/Kling Prompt 문자열이다.

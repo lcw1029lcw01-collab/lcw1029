@@ -15,14 +15,14 @@ Writing Department
 
 ## 입력
 - 리서치 자료 (Researcher 출력)
-- `문서/바이블/세계관.md` (세계관)
+- `docs/bibles/world.md` (세계관)
 
 ## 출력
 - project.json의 `story` 블록
 - Scene별 나레이션 초안
 
 ## 따르는 규칙
-- `문서/바이블/스토리.md` — 서사 구조, 타임라인, Scene 규칙
+- `docs/bibles/story.md` — 서사 구조, 타임라인, Scene 규칙
 - 나레이션 한 문장 = 이미지 하나
 - 스토리는 질문으로 시작한다
 

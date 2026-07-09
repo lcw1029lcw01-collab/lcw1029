@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "ados/스키마/project.json",
+  "$id": "ados/schemas/project.json",
   "title": "Project",
   "description": "영상 한 편(에피소드)의 프로젝트 정의. ados create의 입력이자 파이프라인 전체의 기준 데이터.",
   "type": "object",
@@ -13,7 +13,7 @@
     "channel": {
       "type": "string",
       "enum": ["beyond_humanity", "humanity_explained", "civilization_stories"],
-      "description": "채널. 문서/02_비전.md 포트폴리오 참조"
+      "description": "채널. docs/02_VISION.md 포트폴리오 참조"
     },
     "title": {
       "type": "object",
@@ -37,7 +37,7 @@
     },
     "world_year": {
       "type": "integer",
-      "description": "World Bible 타임라인 상의 연도 (예: 2050, 2140, 1000000). 바이블/세계관.md 참조"
+      "description": "World Bible 타임라인 상의 연도 (예: 2050, 2140, 1000000). bibles/world.md 참조"
     },
     "story": {
       "type": "object",
