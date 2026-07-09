@@ -1,0 +1,95 @@
+# Prompt Bible (v0.1 초안)
+
+> ⚠️ 이 문서는 파이프라인의 **마지막 단계**다. Prompt는 Director의 결정에서 자동 생성되는 **결과물**이다.
+> 사람이 Prompt를 직접 작성하는 것은 금지다.
+
+## Prompt 조립 구조 (Prompt DSL)
+
+Prompt는 한 줄 문장이 아니다. **블록을 조립**한다:
+
+```
+Character Prompt + Environment Prompt + Camera Prompt + Lighting Prompt + Mood Prompt + Film Prompt
+```
+
+### 블록 정의 예
+
+```
+Subject:      Transparent cybernetic human
+Environment:  Megacity with floating architecture
+Camera:       Wide establishing shot
+Lens:         24mm
+Lighting:     Golden sunrise
+Atmosphere:   Morning mist
+Mood:         Hopeful but mysterious
+Composition:  Centered composition
+Film:         ARRI Alexa 65 / IMAX documentary / Kodak Vision3
+Aspect Ratio: 16:9
+```
+
+Claude(Prompt Engine)가 블록을 합쳐 최종 Prompt를 생성한다.
+
+## Midjourney Prompt 규칙
+
+### ❌ 절대 금지
+
+```
+A robot
+```
+
+### ⭕ 항상 이 구조
+
+```
+주인공 + 행동 + 장소 + 시간 + 조명 + 카메라 + 렌즈 + 분위기
+```
+
+### 좋은 예
+
+```
+A lonely astronaut standing on a frozen Mars colony during sunrise,
+cinematic composition, 35mm lens, orange atmospheric haze,
+ultra realistic, IMAX documentary style
+```
+
+```
+Transparent futuristic human walking through a massive cybernetic city
+beneath three moons at dawn, cinematic, ultra realistic,
+volumetric lighting, IMAX documentary, 8K
+```
+
+## 고정 스타일 (Film 블록)
+
+모든 이미지에 영화 필름 룩을 적용한다:
+
+```
+Shot on ARRI Alexa 65
+IMAX documentary
+Kodak Vision3
+```
+
+- 항상 실사(photorealistic). **일러스트 금지.**
+
+## Kling Motion Prompt 규칙
+
+5초 단위의 미세하고 자연스러운 움직임만:
+
+```
+Slow cinematic dolly in.
+Wind blowing.
+Dust particles.
+Camera shake.
+Natural eye blinking.
+Soft breathing.
+```
+
+> AI 영상은 5초는 훌륭하지만 20~30초 연속이면 "AI 같다"가 느껴진다. 항상 짧게 자른다.
+
+## Prompt Generator 흐름
+
+사람은 Prompt를 쓰지 않는다. **Prompt Generator를 만든다:**
+
+```
+Scene → Emotion → Camera → Lens → Time → Weather → Architecture
+→ Character → Composition → Movie Reference → Prompt 생성
+```
+
+입력은 Scene JSON(`schemas/scene.json`), 출력은 Midjourney/Kling Prompt 문자열이다.

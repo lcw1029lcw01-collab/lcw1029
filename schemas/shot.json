@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ados/schemas/shot.json",
+  "title": "Shot",
+  "description": "Scene 안의 카메라 단위. 영화는 Shot이 계속 바뀐다 (같은 카메라 반복 금지).",
+  "type": "object",
+  "required": ["shot", "camera", "duration"],
+  "properties": {
+    "shot": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Shot 번호 (Scene 내부 순서)"
+    },
+    "camera": {
+      "type": "string",
+      "enum": ["Establishing", "Wide", "CloseUp", "ExtremeCloseUp", "Drone", "Shoulder", "Side", "POV", "LowAngle", "HighAngle", "Tracking", "Orbit", "Macro", "Handheld"],
+      "description": "카메라 타입. bibles/camera.md 참조"
+    },
+    "lens": {
+      "type": "string",
+      "enum": ["24mm", "35mm", "50mm", "85mm"]
+    },
+    "movement": {
+      "type": "string",
+      "description": "카메라 움직임 (예: Slow Dolly, Static, Orbit, Walking, Panning, Zoom, Parallax)"
+    },
+    "height": {
+      "type": "string",
+      "description": "드론 고도 등 (예: 50m)"
+    },
+    "target": {
+      "type": "string",
+      "description": "피사체 부위/대상 (예: 발, 헬멧, 눈, 도시 전체)"
+    },
+    "duration": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 8,
+      "description": "Shot 길이 (초). 2~5초 권장"
+    }
+  }
+}

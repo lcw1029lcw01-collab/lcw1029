@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ados/schemas/project.json",
+  "title": "Project",
+  "description": "영상 한 편(에피소드)의 프로젝트 정의. ados create의 입력이자 파이프라인 전체의 기준 데이터.",
+  "type": "object",
+  "required": ["topic", "channel", "duration_minutes"],
+  "properties": {
+    "topic": {
+      "type": "string",
+      "description": "주제. 사람이 입력하는 유일한 값 (예: 100만 년 후 인간은 어떤 모습일까?)"
+    },
+    "channel": {
+      "type": "string",
+      "enum": ["beyond_humanity", "humanity_explained", "civilization_stories"],
+      "description": "채널. docs/02_VISION.md 포트폴리오 참조"
+    },
+    "title": {
+      "type": "object",
+      "properties": {
+        "en": { "type": "string", "description": "영어 제목 (질문형: What If... / Why... / How...)" },
+        "ko": { "type": "string", "description": "한국어 제목" }
+      }
+    },
+    "language": {
+      "type": "string",
+      "enum": ["en", "ko"],
+      "default": "en",
+      "description": "제작 언어. 영어 먼저 제작 후 한국어 현지화"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "minimum": 20,
+      "maximum": 35,
+      "default": 25,
+      "description": "영상 길이 (분). 롱폼 20~35분"
+    },
+    "world_year": {
+      "type": "integer",
+      "description": "World Bible 타임라인 상의 연도 (예: 2050, 2140, 1000000). bibles/world.md 참조"
+    },
+    "story": {
+      "type": "object",
+      "description": "Story Engine 출력 (Hook/Conflict/Discovery/Twist/Ending/Question)",
+      "properties": {
+        "hook": { "type": "string" },
+        "conflict": { "type": "string" },
+        "discovery": { "type": "string" },
+        "twist": { "type": "string" },
+        "ending": { "type": "string" },
+        "question": { "type": "string", "description": "마지막 철학적 질문" }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "items": { "$ref": "scene.json" },
+      "description": "Scene 목록. 25분 = 120~200개"
+    },
+    "seo": {
+      "type": "object",
+      "description": "SEO Engine 출력",
+      "properties": {
+        "titles_en": { "type": "array", "items": { "type": "string" } },
+        "titles_ko": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "chapters": { "type": "array", "items": { "type": "string" } },
+        "pinned_comment": { "type": "string" },
+        "thumbnail_text": { "type": "string", "description": "썸네일 문구 (1~3단어, 큰 숫자 우선: 2050, 1M YEARS)" }
+      }
+    },
+    "version": { "type": "string", "description": "ADOS 버전 (예: v0.1)" },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "research", "story", "scenes", "directing", "visual", "voice", "editing", "published"],
+      "description": "파이프라인 진행 상태"
+    }
+  }
+}

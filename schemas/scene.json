@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ados/schemas/scene.json",
+  "title": "Scene",
+  "description": "영상의 최소 단위. 5~8초. 모든 엔진이 이 데이터로 통신한다. Prompt는 여기서 자동 생성되는 결과물이다.",
+  "type": "object",
+  "required": ["scene", "narration", "emotion", "camera", "duration"],
+  "properties": {
+    "scene": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Scene 번호 (001부터)"
+    },
+    "narration": {
+      "type": "object",
+      "description": "나레이션 (영어 원본 + 한국어 현지화)",
+      "properties": {
+        "en": { "type": "string" },
+        "ko": { "type": "string" },
+        "tts_emotion": { "type": "string", "description": "Typecast 감정 태그" }
+      }
+    },
+    "emotion": {
+      "type": "object",
+      "description": "감정 수치 모델 (0~100). 지배 감정이 연출을 결정한다. bibles/emotion.md 참조",
+      "properties": {
+        "dominant": { "type": "string", "description": "지배 감정 (예: 외로움)" },
+        "scores": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0, "maximum": 100 },
+          "description": "감정별 수치. 예: {\"외로움\": 80, \"희망\": 10, \"공포\": 60, \"신비\": 70}"
+        }
+      }
+    },
+    "camera": {
+      "type": "string",
+      "description": "카메라 타입. bibles/camera.md 목록에서 선택",
+      "enum": ["Establishing", "Wide", "CloseUp", "ExtremeCloseUp", "Drone", "Shoulder", "Side", "POV", "LowAngle", "HighAngle", "Tracking", "Orbit", "Macro", "Handheld"]
+    },
+    "lens": {
+      "type": "string",
+      "enum": ["24mm", "35mm", "50mm", "85mm"],
+      "description": "렌즈. bibles/camera.md 참조"
+    },
+    "lighting": { "type": "string", "description": "조명 (예: 새벽, Sunrise, Golden)" },
+    "weather": { "type": "string", "description": "날씨 (예: 안개, 비, 눈)" },
+    "subject": { "type": "string", "description": "주인공/피사체. Character Bible의 캐릭터명 사용 (예: Future Human Type-A)" },
+    "motion": { "type": "string", "description": "움직임 (예: 천천히 걷기)" },
+    "duration": {
+      "type": "number",
+      "minimum": 2,
+      "maximum": 10,
+      "description": "Scene 길이 (초). 기본 5~8초"
+    },
+    "media_type": {
+      "type": "string",
+      "enum": ["video", "image", "infographic", "text"],
+      "description": "미디어 유형. 비율 규칙은 bibles/director.md (video 20~25%, image 50~60%, infographic 10~15%, text 5~10%)"
+    },
+    "color": { "type": "string", "description": "색감. Color Bible 참조 (예: Blue, Orange, Cyan)" },
+    "bgm": { "type": "string", "description": "음악 분위기 (예: Low Piano, Heartbeat)" },
+    "shots": {
+      "type": "array",
+      "items": { "$ref": "shot.json" },
+      "description": "Scene을 여러 Shot으로 분해할 때 (선택)"
+    },
+    "prompts": {
+      "type": "object",
+      "description": "자동 생성된 프롬프트 (결과물, 사람이 직접 작성 금지)",
+      "properties": {
+        "midjourney": { "type": "string" },
+        "kling": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+# Director 직원 (감독)
+
+## 소속
+Directing Department — ⭐ ADOS의 핵심 직원
+
+## 역할
+장면 연출. **이미지를 만드는 사람이 아니라 결정을 내리는 사람.**
+
+## 하는 일
+Story를 보고 Scene마다 연출을 결정한다. 항상 이 순서:
+
+```
+감정 → 카메라 → 렌즈 → 색감 → 조명 → 음악 → 속도
+```
+
+- Scene별 감정 수치 분석 (Emotion Engine)
+- 감정 → 연출 매핑 (bibles/director.md 규칙표)
+- 영상/이미지/인포그래픽/텍스트 비율 결정 (20~25% / 50~60% / 10~15% / 5~10%)
+- Shot 다양화 — 같은 카메라 반복 금지
+- Visual Motif 삽입 위치 결정
+
+## 입력
+- Scene 목록 + 나레이션 (Writer 출력)
+- `docs/bibles/emotion.md` (감정 규칙)
+
+## 출력
+- scene.json의 연출 필드 (emotion, camera, lens, lighting, weather, color, bgm, media_type)
+
+## 따르는 규칙
+- `docs/bibles/director.md` — 감정→연출 매핑, 비율 규칙, Shot 다양화
+- Prompt를 직접 쓰지 않는다. 결정만 내린다. **Prompt는 결과다.**
+
+## 예시
+
+```
+Scene 12
+감정: 외로움 → Camera: Wide → Lens: 24mm → Weather: Snow → Color: Blue → BGM: Low Piano
+```

@@ -1,0 +1,175 @@
+# 03. ARCHITECTURE — 시스템 구조
+
+## 핵심 관점: ADOS는 회사다
+
+ADOS는 Engine의 나열이 아니다. **회사이며, AI 직원(Employee)들이 협업한다.**
+
+```
+ADOS
+
+CEO
+│
+├── Research Department    (리서치)
+├── Writing Department     (대본)
+├── Directing Department   (연출)
+├── Visual Department      (이미지·영상)
+├── Audio Department       (나레이션·음악)
+├── Editing Department     (편집)
+└── Marketing Department   (SEO·업로드)
+```
+
+### AI 직원 목록
+
+```
+대표(CEO) → 프로듀서 → 리서처 → 작가 → 감독 → 촬영감독
+→ 컨셉아티스트 → 영상감독 → 성우 → 편집자 → SEO매니저 → 업로드매니저
+```
+
+각 직원의 역할 정의는 `agents/` 폴더에 있다.
+직원들은 앞 직원의 결과물을 보고 일한다. (감독은 Story를 보고 Scene을 만들고, 촬영감독은 감독의 연출을 보고 카메라를 정하고, Prompt 직원은 카메라를 보고 Prompt를 만든다.)
+
+---
+
+## 전체 파이프라인
+
+```
+Topic (주제 입력)
+    │
+    ▼
+Research Engine      ← 과학 논문, NASA 자료, 진화학, 통계, 사실 검증
+    │
+    ▼
+Knowledge Engine     ← 리서치 결과 정리·구조화
+    │
+    ▼
+Story Engine         ← Hook / Conflict / Discovery / Twist / Ending / Question
+    │
+    ▼
+Emotion Engine       ← Scene별 감정 수치 (외로움 80, 희망 10, 공포 60, 신비 70 ...)
+    │
+    ▼
+Director Engine      ← ⭐ 핵심. 감정 → 카메라·렌즈·조명·색감·음악·속도 결정
+    │
+    ▼
+Scene Engine         ← 25분 = 120~200 Scene 분할, Scene별 나레이션·길이·감정
+    │
+    ▼
+Visual Engine        ← Midjourney Prompt 자동 조립 (인물 일관성 유지)
+    │
+    ▼
+Motion Engine        ← Kling 카메라 움직임 Prompt
+    │
+    ▼
+Voice Engine         ← Typecast 감정(TTS Emotion) 태그
+    │
+    ▼
+Editor Engine        ← 자동 편집, Premiere XML, 자막
+    │
+    ▼
+Publishing Engine    ← SEO (제목·설명·태그·챕터·고정댓글), 썸네일, 업로드
+```
+
+### Decision Engineering — 왜 Director가 먼저인가
+
+99%는 Prompt에 집착한다. 우리는 **Prompt보다 Director가 중요하다.**
+
+```
+Scene 12
+  감정: 외로움
+    ↓
+  Camera: Wide
+    ↓
+  Lens: 24mm
+    ↓
+  Weather: Snow
+    ↓
+  Color: Blue
+    ↓
+  BGM: Low Piano
+    ↓
+  Prompt: (자동 생성)
+```
+
+**Director Engine이 결정하면, Prompt는 자동으로 나온다. Prompt Engine은 사실 제일 마지막이다.**
+
+---
+
+## 내부 프로젝트 구분
+
+```
+ADOS
+├── Core      — 운영체제: JSON, Schema, Agent
+├── Brain     — AI가 생각하는 부분: Story, Director, Emotion, Research
+├── Studio    — 영상 제작: Midjourney, Kling, Typecast, Premiere
+├── Factory   — 자동화: API, Queue, Scheduler, Render
+└── Channels  — Beyond Humanity, Humanity Explained, Civilization Stories ...
+```
+
+채널이 성공하면 **Engine 하나만 추가**하면 된다 (예: History Engine). 나머지 시스템은 그대로.
+
+---
+
+## 폴더 구조
+
+```
+ados/
+├── README.md            — 프로젝트 소개
+├── PROJECT_STATE.md     — 현재 상태 (AI가 작업 후 갱신)
+├── TASK.md              — 오늘 할 일
+├── CHANGELOG.md         — 변경 이력 (왜 바꿨는지)
+│
+├── docs/                — 설계 문서 (00~06 번호 순서로 읽기)
+│   ├── 00_AI_CONTEXT.md
+│   ├── 01_PROJECT_CHARTER.md
+│   ├── 02_VISION.md
+│   ├── 03_ARCHITECTURE.md
+│   ├── 04_ROADMAP.md
+│   ├── 05_GLOSSARY.md
+│   ├── 06_DEVELOPMENT_RULES.md
+│   ├── bibles/          — 제작 규칙: story, director, camera, emotion, world, prompt
+│   ├── decisions/       — 중요한 결정 기록
+│   └── meetings/        — 회의(대화) 기록
+│
+├── agents/              — AI 직원 역할 정의
+├── engines/             — 엔진 구현 (Story, Director, Scene, Prompt, Motion, Editor ...)
+├── schemas/             — 데이터 규격 (scene.json, shot.json, project.json)
+├── prompts/             — 프롬프트 템플릿 (midjourney/, kling/, typecast/)
+├── examples/            — 예제 (beyond_humanity 1편 등)
+├── scripts/             — 유틸리티 스크립트
+├── src/                 — 소스 코드
+├── tests/               — 테스트
+└── output/              — 생성 결과물
+```
+
+---
+
+## 데이터 중심 설계
+
+모든 엔진은 **JSON/YAML로 데이터를 주고받는다.** Scene 하나의 예:
+
+```json
+{
+  "scene": 1,
+  "emotion": "외로움",
+  "camera": "와이드샷",
+  "lens": "24mm",
+  "lighting": "새벽",
+  "weather": "안개",
+  "subject": "미래 인간",
+  "motion": "천천히 걷기",
+  "duration": 5
+}
+```
+
+Claude Code는 이 JSON만 받아도 이미지, 영상, 나레이션까지 만들 수 있다.
+정식 규격은 `schemas/scene.json`, `schemas/shot.json`, `schemas/project.json`에 정의한다.
+
+---
+
+## 외부 도구 파이프라인
+
+```
+ChatGPT (설계·대본) → Claude Code (구현·오케스트레이션)
+→ Midjourney (이미지) → Kling (영상화) → Runway (카메라 무빙·애니메이션)
+→ Typecast (나레이션) → Premiere (편집) → YouTube (업로드)
+```
